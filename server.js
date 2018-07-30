@@ -8,25 +8,17 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+const Router = require('koa-router');
+
 const app = new Koa();
+
+router = new Router();
 
 app.use(logger());
 
 app.use(koaBody({ multipart: true }));
 
-// custom 404
-
-app.use(async function(ctx, next) {
-  await next();
-  if (ctx.body || !ctx.idempotent) return;
-  ctx.redirect('/404.html');
-});
-
-// serve files from ./public
-app.use(serve(path.join(__dirname, '/publicBasic')));
-
 // handle uploads
-
 app.use(async function(ctx, next) {
   // ignore non-POSTs
   if ('POST' != ctx.method) return await next();
@@ -38,16 +30,52 @@ app.use(async function(ctx, next) {
   // ctx.redirect('/');
 });
 
-// listen
 
-app.use(router.routes()).use(router.allowedMethods());
+setupEndpoints(app, router);
 
-app.use(serve('./public'));
+const port = 3000;
+var server = app.listen({ port: port }, () => {
+  console.log(`Server ready at localhost:${port}`);
+});
 
-app.listen(3000);
+
 console.log('listening on port 3000');
 
 
+
+//  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//    Setup Endpoints
+//  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+function setupEndpoints(app, router){
+
+  // custom 404
+  app.use(async function(ctx, next) {
+    await next();
+    if (ctx.body || !ctx.idempotent) return;
+    ctx.redirect('/404.html');
+  });
+
+
+  // serve files from ./publicBasic
+  router.redirect('/basic_upload', '/basic_upload.html');
+  app.use(serve(path.join(__dirname, '/publicBasic')));
+
+
+
+  app.use(router.routes()).use(router.allowedMethods());
+
+  // Load the vue app at root route.
+  app.use(serve('./public'));
+
+
+}
+
+
+
+
+//  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//    Colour processing
+//  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
 function calculateColour(file){
