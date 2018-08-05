@@ -76,17 +76,18 @@ export default {
       }
   },
   methods:{
-    upload(formData) {
+    async upload(formData) {
       const url = `${BASE_URL}/`;
-      return axios.post(url, formData,{
+      var result = await axios.post(url, formData,{
       headers: {
           'Content-Type': 'multipart/form-data'
-      }})
+      }});
           // get data
-          .then(x => x.data)
-          // add url field
-          .then(x => x.map(img => Object.assign({},
-              img, { url: `${BASE_URL}/images/${img.id}` })));
+          console.log("Result");
+        console.log(result);
+          // // add url field
+          // .then(x => x.map(img => Object.assign({},
+          //     img, { url: `${BASE_URL}/images/${img.id}` })));
     },
     reset() {
       // reset form to initial state

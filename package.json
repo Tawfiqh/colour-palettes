@@ -10,7 +10,7 @@
     "build-client": "cd client && npm run build",
     "setup": "npm install; npm run build-client",
     "whole_shebang": "npm run setup; npm run serve",
-    "serve": "nodemon server.js"
+    "serve": "nodemon server/server.js"
   },
   "author": "Tawfiq.",
   "license": "ISC",
