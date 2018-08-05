@@ -2,8 +2,9 @@
 https://www.dezeen.com/2018/02/28/john-pawson-interview-architecture-photography-spectrum-book/
 
 ## ToDo
-1. Return/show the image after the colour swatch is uploaded.
-2. Reset state cleanly to allow multiple uploads.
+1. ~~Return/show the image after the colour swatch is uploaded.~~
+
+2. ~~Reset state cleanly to allow multiple uploads.~~
 
 3. Separate class to store images in a database along with their swatch.
 
