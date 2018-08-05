@@ -15,17 +15,27 @@ const app = new Koa();
 router = new Router();
 
 app.use(logger());
+enableCors(app);
 
 app.use(koaBody({ multipart: true }));
+
 
 // handle uploads
 app.use(async function(ctx, next) {
   // ignore non-POSTs
   if ('POST' != ctx.method) return await next();
+  console.log("Hitting that method");
+  console.log(JSON.stringify(ctx), null, 2);
 
-  var colourPromise = calculateColour(ctx.request.files.file);
+  console.log("Request file:");
 
-  ctx.body = await colourPromise;
+  console.log(JSON.stringify(ctx.request.files.photos), null, 2);
+
+  var colorResult = await calculateColour(ctx.request.files.photos);
+
+  console.log("Got the color");
+  console.log(colorResult)
+  ctx.body = colorResult;
 
   // ctx.redirect('/');
 });
@@ -71,6 +81,14 @@ function setupEndpoints(app, router){
 }
 
 
+function enableCors(app){
+  app.use(async (ctx, next) => {
+    console.log("hi from CORS");
+    ctx.set('Access-Control-Allow-Origin', "http://localhost:8080");
+    ctx.set('Access-Control-Allow-Credentials', 'true');
+    await next();
+  });
+}
 
 
 //  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
