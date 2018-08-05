@@ -40,6 +40,10 @@
       </p>
       <pre>{{ uploadError }}</pre>
     </div>
+    <br />
+    <div class="color-box" :style="{backgroundColor: backingColour}">
+
+    </div>
   </div>
 </div>
 
@@ -59,7 +63,8 @@ export default {
     uploadedFiles: [],
     uploadError: null,
     currentStatus: null,
-    uploadFieldName: 'photos'
+    uploadFieldName: 'photos',
+    backingColour: "lightgrey"
   }),
   computed: {
       isInitial() {
@@ -83,8 +88,9 @@ export default {
           'Content-Type': 'multipart/form-data'
       }});
           // get data
-          console.log("Result");
-        console.log(result);
+      console.log("Result");
+      console.log(result);
+      this.backingColour = result.data;
           // // add url field
           // .then(x => x.map(img => Object.assign({},
           //     img, { url: `${BASE_URL}/images/${img.id}` })));
@@ -95,19 +101,19 @@ export default {
       this.uploadedFiles = [];
       this.uploadError = null;
     },
-    save(formData) {
+    async save(formData) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
-      this.upload(formData)
-        .then(x => {
-          this.uploadedFiles = [].concat(x);
-          this.currentStatus = STATUS_SUCCESS;
-        })
-        .catch(err => {
-          this.uploadError = err.response;
-          this.currentStatus = STATUS_FAILED;
-        });
+      await this.upload(formData)
+
+      // this.uploadedFiles = [].concat(x);
+      this.currentStatus = STATUS_SUCCESS;
+
+        // .catch(err => {
+        //   this.uploadError = err.response;
+        //   this.currentStatus = STATUS_FAILED;
+        // });
     },
     filesChange(fieldName, fileList) {
       // handle file changes
@@ -120,11 +126,8 @@ export default {
         formData.append(fieldName, fileList[x], fileList[x].name);
       }
 
-      console.log(fileList);
-      console.log("sending");
       formData.forEach( x=> {console.log(x);})
 
-      // save it
       this.save(formData);
     }
   },
@@ -163,5 +166,11 @@ export default {
     font-size: 1.2em;
     text-align: center;
     padding: 50px 0;
+  }
+
+  .color-box{
+    height: 250px;
+    width: 100%;
+    border: 1px solid black;
   }
 </style>
