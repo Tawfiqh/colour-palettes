@@ -8,6 +8,10 @@ https://www.dezeen.com/2018/02/28/john-pawson-interview-architecture-photography
 
 3. Separate class to store images in a database along with their swatch.
 
+4. Put database in separate module with dbAddress in an ENV var.
+
+4. Abstract database class schema into an argument for the constructor;
+
 4. Endpoint to query images in a gallery and show images next to their swatches.
 
 5. Add a grouping - field. - i.e group by pink, green, red…
