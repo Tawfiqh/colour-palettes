@@ -16,6 +16,9 @@ https://www.dezeen.com/2018/02/28/john-pawson-interview-architecture-photography
 
 5. Display gallery with bootstrap - investigate whether to use columns or flex.
 
+
+ * * *
+
 5. Add a grouping - field. - i.e group by pink, green, red…
 
 6. Query DB via GraphQL - query to get an image and it's swatch and then related images to that swatch.

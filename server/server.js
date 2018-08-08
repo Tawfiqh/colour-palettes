@@ -13,8 +13,14 @@ var db = new Database(dbAddress);
 
 const fs = require('fs');
 
+const image = require('./models/images');
+const Image = new image(db);
 
-function   writeImageWithColour(file, swatch){
+
+var app = serverEngine.app;
+
+
+function writeImageWithColour(file, swatch){
   var image = fs.readFileSync(file.path);
 
   db.start();
@@ -29,8 +35,18 @@ function   writeImageWithColour(file, swatch){
 }
 
 
+serverEngine.router.get('/images', async (ctx, next) => {
+
+  let {contentType, body} = await Image.getAnImage();
+
+  console.log("Result")
+  console.log(body);
+
+  ctx.type = contentType;
+  ctx.body = body;
+});
+
 (function setupFileUploadPost(){
-  var app = serverEngine.app;
 
   app.use(koaBody({ multipart: true }));
 
